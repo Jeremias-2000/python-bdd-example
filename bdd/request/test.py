@@ -43,4 +43,4 @@ def replace_variable(variable:str) -> str:
 def monta_payload(interceptor:Interceptor):
     # its required depending of the scenarios wether we need to use response from other requests
     
-    return json.dumps(interceptor.source)
+    return json.dumps(interceptor.source['json'])
