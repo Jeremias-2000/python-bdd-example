@@ -1,0 +1,4 @@
+endpoints:
+  listar: /listar
+  simular: /simular
+  detalhar: /detalhe/{schoolNumber}

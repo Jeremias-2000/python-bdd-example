@@ -1,57 +1,56 @@
 from typing import List
 
 class Interceptor:
-    def __init__(self,massa:dict,scenario:str,operacao:str,csv_files:List[str],response:dict) -> None:
-        self.__massa = massa
-        self.__operacao = operacao
+    def __init__(self, source: dict = {}, scenario: str = '', operation: str = '', csv_files: List[str] = [], response: dict = {}) -> None:
+        self.__source = source
+        self.__operation = operation
         self.__csv_files = csv_files
         self.__scenario = scenario
         self.__response = response
     
     @property
-    def set_massa(self,massa):
-        self.__massa = massa
+    def source(self):
+        return self.__source
+    
+    @source.setter
+    def source(self, source):
+        self.__source = source
     
     @property
-    def get_massa(self):
-        return self.__massa
+    def scenario(self):
+        return self.__scenario
     
-    @property
-    def set_scenario(self,scenario:str):
+    @scenario.setter
+    def scenario(self, scenario: str):
         self.__scenario = scenario
     
     @property
-    def set_operacao(self,operacao):
-        self.__operacao = operacao
+    def operation(self):
+        return self.__operation
+    
+    @operation.setter
+    def operation(self, operation):
+        self.__operation = operation
     
     @property
-    def get_operacao(self):
-        return self.__operacao
-    
-    @property
-    def set_endpoint(self,endpoint):
-        self.__endpoint = endpoint
-        
-    @property
-    def set_csv_file(self,csv_file:str):
-        self.__csv_files.append(csv_file)
-    
-    @property
-    def set_csv_files(self,csv_files:List[str]):
-        self.__csv_files = csv_files
-    
-    @property
-    def get_csv_files(self):
+    def csv_files(self):
         return self.__csv_files
     
+    @csv_files.setter
+    def csv_files(self, csv_files: List[str]):
+        self.__csv_files = csv_files
+    
     @property
-    def set_response(self,response):
+    def response(self):
+        return self.__response
+    
+    @response.setter
+    def response(self, response):
         self.__response = response
         
-    @property
-    def get_response(self):
-        return self.__response    
-        
-    def ajusta_csv(self):
-        self.get_csv_files.remove(0)
-    
+    def adjust_csv(self):
+        if self.__csv_files:
+            self.__csv_files.pop(0)
+            
+    def add_csv_file(self, csv_file: str):
+        self.__csv_files.append(csv_file)

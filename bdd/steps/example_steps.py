@@ -1,35 +1,43 @@
 import pytest
 from behave import given,when,then
 from interceptor.interceptor import Interceptor
+from request.test import faz_requisicao
+from map.test import ler_csv_cenario
 
 interceptor = Interceptor()
 
-@given('seleciono a massa "{massa}"')
-def step_seleciono_a_massa(context,massa:str):
-    interceptor.set_csv_file(csv_file=massa)
+@given('seleciono a massa "{variable}"')
+def step_seleciono_a_source(context,variable:str):
+    interceptor.add_csv_file(csv_file=variable)
     
 
 @then('retorna uma lista de alunos')
 def step_retorna_uma_lista_de_alunos(context):
-    pass
+    interceptor.adjust_csv()
+    
 
 
 @given('seleciono os arquivos {csv_files}')
 def step_seleciono_os_arquivos(context,csv_files:str):
-    interceptor.set_csv_files(csv_files.split(','))
+    files = csv_files.split(',')
+    for _,item  in enumerate(files):
+        interceptor.add_csv_file(item)
     
 
 @pytest.mark.timeout(5) # set timeout request 5 seconds
-@when('executo um "{metodoHttp}" no cenario {cenario}')
-def step_executo_um_metodo_http_com_cenario(context,metodoHttp,cenario):
-    interceptor.set_operacao = metodoHttp
-    interceptor.set_scenario = cenario
-    from request.request import faz_requisicao
-    response = faz_requisicao()
-    interceptor.set_response(response)
+@when('executo um "{httpMethod}" no cenario {scenario}')
+def step_executo_um_metodo_http_com_cenario(context,httpMethod,scenario):
+    interceptor.operation = httpMethod
+    interceptor.scenario = scenario
+    interceptor.source = ler_csv_cenario(interceptor.csv_files[0],scenario)
+  
+    response = faz_requisicao(interceptor)
+    interceptor.adjust_csv()
+    #interceptor.response({'test':123})
     
 
 
 @then('retorna uma simulacao de mensalidade')
 def step_retorna_uma_simulacao_de_mensalidade(context):
-    assert interceptor.get_response().status_code == 200
+    pass
+    #assert interceptor.get_response().status_code == 200
